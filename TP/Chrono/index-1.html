@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery</title>
+	<style type="text/css">
+		.square{
+			font-size: 300px;
+			line-height: 300px;
+			text-align: center;
+			margin: 0 auto;
+		}
+		button{
+			font-size:50px;
+		}
+		hr{
+			height: 5px;
+			background-color: #000;
+		}
+		.square{
+			color: yellow;
+			font-family: Digital-7;
+		}
+		@font-face {
+		   font-family: Digital-7;
+		   src: url(digital-7.ttf);
+		}
+	</style>
+</head>
+<body>
+	http://api.jquery.com/
+	<button id="plus1">+1</button>
+	<button id="plus10">+10</button>
+	<button id="moins1">-1</button>
+	<button id="moins10">-10</button>
+	<button id="divide2">/2</button>
+	<button id="multi2">x2</button>
+	<button id="start">Start</button>Ò
+	<hr>
+	<div class="square" style="position:relative; background-color:#000; height:300px;">
+		<span id="hour">00</span>
+		<span class:"dotted">:<span>
+		<span id="min">00</span>
+		<span class:"dotted">:<span>
+		<span id="sec">00</span>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		function functionIncrement(){
+			var value = $(".square #sec").text();
+			if (value < 9) {
+				value = "0"+(parseInt(value)+1);
+			}else{
+				value = parseInt(value)+1;
+			}
+			if(value >= 60){
+				var valueMin = $(".square #min").text();
+				if (valueMin < 9) {
+					valueMin = "0"+(parseInt(valueMin)+1);
+				}else{
+					valueMin = parseInt(valueMin)+1;
+				}
+				$(".square #min").text(valueMin);
+				value = "00";
+			}
+			$(".square #sec").text(value);
+		};
+		function functionIncrement10(){
+			for (var i = 0; i < 10; i++) {
+				functionIncrement();
+			};
+		};
+		$("#plus1").mousemove(functionIncrement);
+		$("#plus10").mousemove(functionIncrement10);
+	</script>
+</body>
+</html>
