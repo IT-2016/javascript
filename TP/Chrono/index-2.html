@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery</title>
+	<style type="text/css">
+		.square{
+			font-size: 300px;
+			line-height: 300px;
+			text-align: center;
+			margin: 0 auto;
+		}
+		button{
+			font-size:50px;
+		}
+		hr{
+			height: 5px;
+			background-color: #000;
+		}
+		.square{
+			color: yellow;
+			font-family: Digital-7;
+		}
+		@font-face {
+		   font-family: Digital-7;
+		   src: url(digital-7.ttf);
+		}
+	</style>
+</head>
+<body>
+	http://api.jquery.com/
+	<button id="plus1">+1</button>
+	<button id="plus10">+10</button>
+	<button id="moins1">-1</button>
+	<button id="moins10">-10</button>
+	<button id="divide2">/2</button>
+	<button id="multi2">x2</button>
+	<button id="start">Start</button>
+	<hr>
+	<div class="square" style="position:relative; background-color:#000; height:300px;">
+		<span id="hour">00</span>
+		<span class:"dotted">:<span>
+		<span id="min">30</span>
+		<span class:"dotted">:<span>
+		<span id="sec">00</span>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		function complementZero(nb){
+			if (nb < 10) {
+				return "0"+nb;
+			} else{
+				return nb;
+			};
+		}
+		function increment(nb){
+			var sec = parseInt($(".square #sec").text());
+			sec = sec + nb
+			quotientSec = parseInt(Math.floor(sec/60));
+			var min = parseInt($(".square #min").text());
+			min = min + quotientSec;
+			resteSec = sec%60;
+			var hour = parseInt($(".square #hour").text());
+			quotientMin = parseInt(Math.floor(min/60));
+			hour = hour + quotientMin;
+			resteMin = min%60;
+			$(".square #sec").text(complementZero(resteSec));
+			$(".square #min").text(complementZero(resteMin));
+			$(".square #hour").text(complementZero(hour));
+		}
+		function decrement(nb){
+			var sec = parseInt($(".square #sec").text());
+			var min = parseInt($(".square #min").text());
+			var hour = parseInt($(".square #hour").text());
+			if(sec == 0){
+				if(min == 0){
+					if(hour == 0){
+						alert("Boom");
+					}else{
+						min = 59;
+						sec = 59;
+						hour = hour - 1
+					}
+				}else{
+					sec = 59;
+					min = min - 1;
+				}
+			}else{
+				sec = sec - 1;
+			}
+			$(".square #sec").text(complementZero(sec));
+			$(".square #min").text(complementZero(min));
+			$(".square #hour").text(complementZero(hour));
+		}
+		$("#plus1").click(function(){
+			increment(1);
+		});
+		$("#plus10").click(function(){
+			increment(10);
+		});
+		$("#moins1").click(function(){
+			decrement(1);
+		});
+		$("#start").click(function(){
+			setInterval(decrement, 100, 1);
+		});
+	</script>
+</body>
+</html>
