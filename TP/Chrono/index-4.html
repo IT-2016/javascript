@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="sweetalert.css">
+	<link rel="stylesheet" type="text/css" href="google.css">
+</head>
+<body>
+http://codepen.io/anon/pen/QyzZdo <br>
+<button id="start">Start</button>
+<button id="stop">Stop</button>
+<button id="tour">Tour</button>
+<button id="pause">Pause</button>
+<ul id="chrono"></ul>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="sweetalert.min.js"></script> 
+<script>
+var start, stop, intervalId, tour, pauseStart;
+var pauseTime = 0;
+
+//Calcul du tempsEcoule entre un début et une fin
+function tempsEcoule(start, stop){
+  return stop - start;  
+}
+
+//Function d'affichage
+function display(tempsEcoule){
+	if(!tour){
+		tour = $('<li class="tour"></li>');
+		$("#chrono").append(tour);
+	}
+
+	//Conversion de Millisecondes en H:M:S
+	tempsEcoule = Math.floor(tempsEcoule/1000);
+  	hour = Math.floor(tempsEcoule/3600);
+	min = Math.floor((tempsEcoule%3600)/60);
+	sec = Math.floor((tempsEcoule%3600)%60);
+  	tempsEcoule = complementZero(hour) + ":" + complementZero(min) + ":" + complementZero(sec);
+	
+	//Affichage du temps
+	tour.text(tempsEcoule);
+}
+
+//Complément à zéro pour l'afficheur
+function complementZero(nb){
+  if (nb < 10) {
+    return "0"+nb;
+  } else{
+    return nb;
+  };
+}
+
+function displayDiff(){
+	var end = new Date();	// Sauvegarde du Chrono à l'instant T (Local)
+	var resultat = tempsEcoule(start, end)	// Calcul du temps entre le debut et la fin
+	if(pauseTime){	//Si il y a une pause 	
+		resultat = resultat - pauseTime; // Retrait du temps de pause au du temps total 
+	}
+	display(resultat); //Demande d'affichage
+}
+
+$("#start").click(function(){
+	$("#start").prop("disabled", "disabled");
+	start = new Date();	// Sauvegarde de début de Chrono (Global)
+	intervalId = setInterval(displayDiff, 1); // Démarrage de l'afficheur
+});
+
+$("#stop").click(function(){
+  tour = "";
+  $("#start").prop("disabled", "");
+  clearInterval(intervalId);
+  start = "";
+});
+
+$("#tour").click(function(){
+	tour = "";
+});
+
+$("#pause").click(function(){
+	if(intervalId){
+		pauseStart = new Date(); // Sauvegarde de début de pause (Global)
+		swal("PAUSE");
+		clearInterval(intervalId); // Arret de l'afficheur
+		intervalId = false;		   // Indicateur comme quoi l'afficheur n'est pas actif
+	} else {
+		var pauseEnd = new Date(); // Sauvegarde de fin de pause (Local)
+		pauseTime = pauseTime + (pauseEnd - pauseStart); // Calcul du temps de pause effectué
+		intervalId = setInterval(displayDiff, 1); // Redémarrage de l'afficheur
+	}
+});
+</script>
+</body>
+</html>
