@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery</title>
+	<style type="text/css">
+		.square, mini-square{
+			min-height: 150px;
+			font-size: 300px;
+			line-height: 300px;
+			text-align: center;
+			margin: 0 auto;
+			color: yellow;
+			font-family: Digital-7;
+		}
+		.mini-square{
+			height: 100px;
+			width: 100px;
+		}
+		button{
+			font-size:50px;
+		}
+		hr{
+			height: 5px;
+			background-color: #000;
+		}
+		@font-face {
+		   font-family: Digital-7;
+		   src: url(fonts/digital-7.ttf);
+		}
+		.red{
+			background-color: red;
+		}
+		.yellow{
+			background-color: yellow;
+		}
+		.blue{
+			background-color: blue;
+		}
+		.black{
+			background-color: black;
+		}
+	</style>
+</head>
+<body>
+	<button id="plus1">+1</button>
+	<button id="moins1">-1</button>
+	<button id="divide2">/2</button>
+	<button id="multi2">x2</button>
+	<button id="start">Start</button>
+	<button id="synchro">Synchro</button>
+	<button id="pause">Pause Déjeuner</button>
+	<hr>
+	<div id="timer" class="square black">00:00:00</div>
+	<hr>
+	<div id="squareHour" class="mini-square blue"></div>
+	<div id="squareMin" class="mini-square yellow"></div>
+	<div id="squareSec" class="mini-square red"></div>
+	<hr>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		var timer = 0;
+		function complementZero(nb){
+			if (nb < 10) {
+				return "0"+nb;
+			} else{
+				return nb;
+			};
+		}
+		function display(){
+			hour = Math.floor(timer/3600);
+			min = Math.floor((timer%3600)/60);
+			sec = Math.floor((timer%3600)%60);
+			textTimer = complementZero(hour) + ":" + complementZero(min) + ":" + complementZero(sec);
+			$(".square#timer").text(textTimer);
+		}
+		$("#plus1").click(function(){
+			timer = timer + 1;
+			display();
+		});
+		$("#moins1").click(function(){
+			timer= timer - 1;
+			display();
+		});
+		$("#multi2").click(function(){
+			timer = timer * 2;
+			display();
+		});
+		$("#divide2").click(function(){
+			timer = Math.floor(timer / 2);
+			display();
+		});
+		$("#start").click(function(){
+			function chrono(){
+				timer = timer + 1;
+				display();
+			}
+			setInterval(chrono, 1000);
+		});
+		$("#synchro").click(function(){
+			function chrono(){
+				var now = new Date();
+				hours = now.getHours();
+				min = now.getMinutes();
+				sec = now.getSeconds();
+				timer = (hours*60*60) + (min*60) + sec;;
+				display();
+			}
+			setInterval(chrono, 400);
+			
+		});
+		$("#pause").click(function(){
+			var now = new Date();
+			var pause = new Date(now.getFullYear(),now.getMonth(),now.getDate(),12,30,0);
+			timer = Math.floor((pause - now)/1000);
+			function chrono(){
+				timer = timer - 1;
+				display();
+			}
+			setInterval(chrono, 1000);
+		});
+
+		var timeSec = 0;
+		var dir = true;
+		function chronoSquare(){
+			timeSec = timeSec + 1;
+			if(dir){
+				$("#squareSec").css("margin-left", (100/60) * timeSec + "%");
+			}else{
+				$("#squareSec").css("margin-left", (100 - (100/60) * timeSec) + "%");
+			}
+			if(timeSec == 60){
+				dir = !dir;
+				timeSec = 0;
+			}
+		}
+		setInterval(chronoSquare, 100);
+		
+
+
+	</script>
+</body>
+</html>
